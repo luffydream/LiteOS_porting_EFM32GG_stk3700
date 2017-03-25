@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\Huawei_LiteOS\kernel\include;..\Huawei_LiteOS\kernel\base\include;..\Huawei_LiteOS\platform\bsp\sample\config;..\Huawei_LiteOS\platform\cpu\arm\cortex-m3;..\User;..\Startup</IncludePath>
+              <IncludePath>..\Huawei_LiteOS\kernel\include;..\Huawei_LiteOS\kernel\base\include;..\Huawei_LiteOS\platform\bsp\sample\config;..\Huawei_LiteOS\platform\cpu\arm\cortex-m3;..\User;..\Startup;..\example\include;..\Huawei_LiteOS\kernel\cmsis</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -464,6 +464,11 @@
               <FileType>1</FileType>
               <FilePath>..\Huawei_LiteOS\kernel\base\misc\los_misc.c</FilePath>
             </File>
+            <File>
+              <FileName>cmsis_liteos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Huawei_LiteOS\kernel\cmsis\cmsis_liteos.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -493,6 +498,76 @@
               <FileName>los_dispatch.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Huawei_LiteOS\platform\cpu\arm\cortex-m3\los_dispatch.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>HuaWeiLiteOS_example</GroupName>
+          <Files>
+            <File>
+              <FileName>los_api_dynamic_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_dynamic_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_interrupt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_interrupt.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_msgqueue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_msgqueue.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_sem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_sem.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_static_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_static_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_systick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_systick.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_api_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_api_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_cmsis_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_cmsis_main.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_demo_entry.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\example\api\los_demo_entry.c</FilePath>
             </File>
           </Files>
         </Group>

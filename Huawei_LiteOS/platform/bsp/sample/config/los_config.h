@@ -321,7 +321,7 @@ extern char _PT0_END;
  */
 extern UINT32 osTaskInit(VOID);
 
-
+extern UINT32 LOS_Start(void);
 
 /**
  * @ingroup  los_config

@@ -49,6 +49,7 @@ UINT32 g_sys_mem_addr_end = 0;
 extern UINT8 g_ucMemStart[];
 extern UINT32 osTickInit(UINT32 uwSystemClock, UINT32 uwTickPerSecond);
 extern UINT32   g_uwTskMaxNum;
+extern void LOS_Demo_Entry(void);
 
 void osEnableFPU(void)
 {
@@ -198,7 +199,8 @@ int main(void)
     if (uwRet != LOS_OK) {
         return LOS_NOK;
     }
-		osAppInit();
+		//osAppInit();
+LOS_Demo_Entry();
     LOS_Start();
 
     for (;;);
