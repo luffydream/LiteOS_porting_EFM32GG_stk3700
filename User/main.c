@@ -1,129 +1,89 @@
-/**
-  ******************************************************************************
-  * @file    main.c
-  * @author  Supowang  any question please send mail to 512965803@qq.com
-  * @version V1.0
-  * @date    2016-12-07
-  * @brief   Huawei LiteOS  ARM Cortex M0 DEMO 
-  ******************************************************************************
-  * @attention
-	* Platform :  Atmel SAM D21 Xplained Pro
-  *	Huawei LiteOS Source Code:http://developer.huawei.com/ict/cn/site-iot/product/liteos
-	* GitHub:https://github.com/LiteOS
-  ******************************************************************************
-  */
-/* Includes ------------------------------------------------------------------*/
-// Huawei LiteOS Headfiles
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "los_base.h"
-#include "los_config.h"
-#include "los_typedef.h"
-#include "los_hwi.h"
+#include "los_sys.h"
+#include "los_tick.h"
 #include "los_task.ph"
-#include "los_sem.h"
-#include "los_event.h"
-#include "los_memory.h"
-#include "los_queue.ph"
+#include "los_config.h"
 
-#include "bsp.h"
-#include "Board_LED.h"
-UINT32 g_TestTskHandle;
+#include "los_bsp_led.h"
+#include "los_bsp_key.h"
+#include "los_bsp_uart.h"
+#include "los_inspect_entry.h"
+#include "los_demo_entry.h"
 
-void delay(unsigned int n)
+#include <string.h>
+
+extern void LOS_EvbSetup(void);
+
+static UINT32 g_uwboadTaskID;
+LITE_OS_SEC_TEXT VOID LOS_BoadExampleTskfunc(VOID)
 {
-	int i,j;
-	for(j=0;j<200;j++)
-		for(i=0;i<n;i++);
+    while (1)
+    {
+        LOS_EvbLedControl(LOS_LED2, LED_ON);
+        LOS_EvbUartWriteStr("Board Test\n");
+        LOS_TaskDelay(500);
+        LOS_EvbLedControl(LOS_LED2, LED_OFF);
+        LOS_TaskDelay(500);
+    }
+}
+void LOS_BoadExampleEntry(void)
+{
+    UINT32 uwRet;
+    TSK_INIT_PARAM_S stTaskInitParam;
+
+    (VOID)memset((void *)(&stTaskInitParam), 0, sizeof(TSK_INIT_PARAM_S));
+    stTaskInitParam.pfnTaskEntry = (TSK_ENTRY_FUNC)LOS_BoadExampleTskfunc;
+    stTaskInitParam.uwStackSize = LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE;
+    stTaskInitParam.pcName = "BoardDemo";
+    stTaskInitParam.usTaskPrio = 10;
+    uwRet = LOS_TaskCreate(&g_uwboadTaskID, &stTaskInitParam);
+
+    if (uwRet != LOS_OK)
+    {
+        return ;
+    }
+    return ;
 }
 
-void hardware_init(void)
+/*****************************************************************************
+ Function    : main
+ Description : Main function entry
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+LITE_OS_SEC_TEXT_INIT
+int main(void)
 {
-		LED_Initialize();
-		//USART_Init();
-}
+    UINT32 uwRet;
+    /*
+		add you hardware init code here
+		for example flash, i2c , system clock ....
+    */
+	//HAL_init();....
 
-VOID task1(void)
-{
-	UINT32 uwRet = LOS_OK;
-	while(1)
-	{
-		LED_On(0);
-		delay(1000);
-		LED_Off(0);
-		delay(1000);
-		uwRet = LOS_TaskDelay(1000);
-		if(uwRet !=LOS_OK)
-			return;
-	}
+	/*Init LiteOS kernel */
+    uwRet = LOS_KernelInit();
+    if (uwRet != LOS_OK) {
+        return LOS_NOK;
+    }
+	/* Enable LiteOS system tick interrupt */
+    LOS_EnableTick();
+	
+    /* 
+        Notice: add your code here
+        here you can create task for your function 
+        do some hw init that need after systemtick init
+    */
+    LOS_EvbSetup(); //init the device on the dev baord
+   
+    LOS_Demo_Entry();	
+		
+    LOS_Inspect_Entry();
+    
+    LOS_BoadExampleEntry();	
+		
+    /* Kernel start to run */
+    LOS_Start();
+    for (;;);
+    /* Replace the dots (...) with your own code.  */
 }
-UINT32 creat_task1(void)
-{
-	UINT32 uwRet = LOS_OK;
-	TSK_INIT_PARAM_S task_init_param;
-	task_init_param.usTaskPrio = 0;
-	task_init_param.pcName = "task1";
-	task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task1;
-	task_init_param.uwStackSize = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
-	task_init_param.uwResved = LOS_TASK_STATUS_DETACHED;
-	uwRet = LOS_TaskCreate(&g_TestTskHandle,&task_init_param);
-	if(uwRet !=LOS_OK)
-	{
-		return uwRet;
-	}
-	return uwRet;
-}
-
-VOID task2(void)
-{
-	UINT32 uwRet = LOS_OK;
-	//int count=0;
-	//char c='1';
-	while(1)
-	{
-		//count++;
-		//USART_putc(c);
-		//printf("Hello HuaweiLiteOS,count is %d\r\n",count);
-		uwRet = LOS_TaskDelay(1000);
-		if(uwRet !=LOS_OK)
-			return;
-	}
-}
-
-UINT32 creat_task2(void)
-{
-	UINT32 uwRet = LOS_OK;
-	TSK_INIT_PARAM_S task_init_param;
-	task_init_param.usTaskPrio = 1;
-	task_init_param.pcName = "task2";
-	task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task2;
-	task_init_param.uwStackSize = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
-	task_init_param.uwResved = LOS_TASK_STATUS_DETACHED;
-	uwRet = LOS_TaskCreate(&g_TestTskHandle,&task_init_param);
-	if(uwRet !=LOS_OK)
-	{
-		return uwRet;
-	}
-	return uwRet;
-}
-
-
-
-UINT32 osAppInit(void)
-{
-	UINT32 uwRet = 0;
-	hardware_init();
-	uwRet = creat_task1();
-	if(uwRet !=LOS_OK)
-	{
-		return uwRet;
-	}
-	uwRet = creat_task2();
-	if(uwRet !=LOS_OK)
-	{
-		return uwRet;
-	}
-	return LOS_OK;
-}
-/*********************************************END OF FILE**********************/
